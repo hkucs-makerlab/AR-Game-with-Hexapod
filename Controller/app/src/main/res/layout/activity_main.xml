@@ -6,21 +6,274 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/button"
+    <TableLayout
+        android:id="@+id/tableLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_connect"
+        app:layout_constraintEnd_toStartOf="@+id/button_id_w"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Space
+                android:layout_width="10dp"
+                android:layout_height="40dp"
+                android:padding="5dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="1"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="2"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="3"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="4"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="W"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/button_id_W1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="#00000000"
+                android:padding="5dp"
+                android:src="@drawable/ic_brightness_1_black_24dp" />
+
+            <ImageButton
+                android:id="@+id/button_id_W2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="#00000000"
+                android:padding="5dp"
+                android:src="@drawable/ic_brightness_1_black_24dp" />
+
+            <ImageButton
+                android:id="@+id/button_id_W3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="#00000000"
+                android:padding="5dp"
+                android:src="@drawable/ic_brightness_1_black_24dp" />
+
+            <ImageButton
+                android:id="@+id/button_id_W4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="#00000000"
+                android:padding="5dp"
+                android:src="@drawable/ic_brightness_1_black_24dp" />
+        </TableRow>
+
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="D"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/button_id_D1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="#00000000"
+                android:padding="5dp"
+                android:src="@drawable/ic_brightness_1_black_24dp" />
+
+            <ImageButton
+                android:id="@+id/button_id_D2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="#00000000"
+                android:padding="5dp"
+                android:src="@drawable/ic_brightness_1_black_24dp" />
+
+            <ImageButton
+                android:id="@+id/button_id_D3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="#00000000"
+                android:padding="5dp"
+                android:src="@drawable/ic_brightness_1_black_24dp" />
+
+            <ImageButton
+                android:id="@+id/button_id_D4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="#00000000"
+                android:padding="5dp"
+                android:src="@drawable/ic_brightness_1_black_24dp" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="F"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/button_id_F1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="#00000000"
+                android:padding="5dp"
+                android:src="@drawable/ic_brightness_1_black_24dp" />
+
+            <ImageButton
+                android:id="@+id/button_id_F2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="#00000000"
+                android:padding="5dp"
+                android:src="@drawable/ic_brightness_1_black_24dp" />
+
+            <ImageButton
+                android:id="@+id/button_id_F3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="#00000000"
+                android:padding="5dp"
+                android:src="@drawable/ic_brightness_1_black_24dp" />
+
+            <ImageButton
+                android:id="@+id/button_id_F4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="#00000000"
+                android:padding="5dp"
+                android:src="@drawable/ic_brightness_1_black_24dp" />
+        </TableRow>
+
+    </TableLayout>
+
+    <ImageButton
+        android:id="@+id/button_id_w"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Connect"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="64dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@drawable/ic_brightness_1_black_24dp" />
 
-    <Button
-        android:id="@+id/button2"
+    <ImageButton
+        android:id="@+id/button_id_f"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/button_id_w"
+        app:layout_constraintStart_toStartOf="@+id/button_id_w"
+        app:layout_constraintTop_toBottomOf="@+id/button_id_w"
+        android:src="@drawable/ic_brightness_1_black_24dp" />
+
+    <ImageButton
+        android:id="@+id/button_id_l"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toStartOf="@+id/button_id_f"
+        app:layout_constraintStart_toStartOf="@+id/button_id_f"
+        app:layout_constraintTop_toBottomOf="@+id/button_id_f"
+        android:src="@drawable/ic_brightness_1_black_24dp" />
+
+    <ImageButton
+        android:id="@+id/button_id_r"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@+id/button_id_f"
+        app:layout_constraintStart_toEndOf="@+id/button_id_f"
+        app:layout_constraintTop_toBottomOf="@+id/button_id_f"
+        android:src="@drawable/ic_brightness_1_black_24dp" />
+
+    <ImageButton
+        android:id="@+id/button_id_b"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:text="Button"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="133dp" />
+        app:layout_constraintEnd_toEndOf="@+id/button_id_f"
+        app:layout_constraintStart_toStartOf="@+id/button_id_f"
+        app:layout_constraintTop_toBottomOf="@+id/button_id_l"
+        android:src="@drawable/ic_brightness_1_black_24dp" />
+
+    <Button
+        android:id="@+id/btn_connect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="Connect"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
