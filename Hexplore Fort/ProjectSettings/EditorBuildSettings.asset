@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/GoogleARCore/Examples/HelloAR/Scenes/HelloAR.unity
-    guid: e6a6fa04348cb45c9b0221eb19c946da
+    path: Assets/HexploreFort/Scenes/Main.unity
+    guid: 543846417d665364c82655f714e4e26a
   m_configObjects: {}
