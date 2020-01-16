@@ -13,9 +13,9 @@ public class Player : System.Object
         def = 10;
         money = 0;
         exp = 0;
-        yellowKey = 1;
-        blueKey = 1;
-        redKey = 1;
+        yellowKey = 0;
+        blueKey = 0;
+        redKey = 0;
     }
 
     public void PickUp(StaticData.ITEM_TYPE type) {
