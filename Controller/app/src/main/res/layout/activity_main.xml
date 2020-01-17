@@ -8,14 +8,13 @@
 
     <TableLayout
         android:id="@+id/tableLayout"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="32dp"
         android:layout_marginBottom="32dp"
+        android:gravity="center"
         app:layout_constraintBottom_toTopOf="@+id/btn_connect"
-        app:layout_constraintEnd_toStartOf="@+id/button_id_w"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -222,50 +221,53 @@
         android:id="@+id/button_id_w"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="64dp"
+        android:src="@drawable/ic_all_out_black_24dp"
+        app:layout_constraintBottom_toTopOf="@+id/button_id_f"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/ic_brightness_1_black_24dp" />
+        app:layout_constraintStart_toEndOf="@+id/tableLayout"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/button_id_f"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="@+id/button_id_w"
-        app:layout_constraintStart_toStartOf="@+id/button_id_w"
-        app:layout_constraintTop_toBottomOf="@+id/button_id_w"
-        android:src="@drawable/ic_brightness_1_black_24dp" />
+        android:src="@drawable/ic_arrow_upward_black_24dp"
+        app:layout_constraintBottom_toTopOf="@+id/button_id_l"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tableLayout"
+        app:layout_constraintTop_toBottomOf="@+id/button_id_w" />
 
     <ImageButton
         android:id="@+id/button_id_l"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toStartOf="@+id/button_id_f"
-        app:layout_constraintStart_toStartOf="@+id/button_id_f"
-        app:layout_constraintTop_toBottomOf="@+id/button_id_f"
-        android:src="@drawable/ic_brightness_1_black_24dp" />
+        android:src="@drawable/ic_arrow_back_black_24dp"
+        app:layout_constraintBottom_toTopOf="@+id/button_id_b"
+        app:layout_constraintEnd_toStartOf="@+id/button_id_r"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/tableLayout"
+        app:layout_constraintTop_toBottomOf="@+id/button_id_f" />
 
     <ImageButton
         android:id="@+id/button_id_r"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@+id/button_id_f"
-        app:layout_constraintStart_toEndOf="@+id/button_id_f"
-        app:layout_constraintTop_toBottomOf="@+id/button_id_f"
-        android:src="@drawable/ic_brightness_1_black_24dp" />
+        android:src="@drawable/ic_arrow_forward_black_24dp"
+        app:layout_constraintBottom_toBottomOf="@+id/button_id_l"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/button_id_l"
+        app:layout_constraintTop_toTopOf="@+id/button_id_l" />
 
     <ImageButton
         android:id="@+id/button_id_b"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/button_id_f"
-        app:layout_constraintStart_toStartOf="@+id/button_id_f"
-        app:layout_constraintTop_toBottomOf="@+id/button_id_l"
-        android:src="@drawable/ic_brightness_1_black_24dp" />
+        android:src="@drawable/ic_arrow_downward_black_24dp"
+        app:layout_constraintBottom_toTopOf="@+id/btn_connect"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tableLayout"
+        app:layout_constraintTop_toBottomOf="@+id/button_id_l" />
 
     <Button
         android:id="@+id/btn_connect"
