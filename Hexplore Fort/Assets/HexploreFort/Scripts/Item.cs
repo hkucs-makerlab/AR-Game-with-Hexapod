@@ -10,7 +10,7 @@ public class Item : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            GameManager.player.PickUp(type);
+            GameManager.Instance.player.PickUp(type);
             Destroy(gameObject);
         }
     }

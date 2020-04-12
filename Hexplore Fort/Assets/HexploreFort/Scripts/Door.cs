@@ -11,7 +11,7 @@ public class Door : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            if (GameManager.player.OpenDoor(type))
+            if (GameManager.Instance.player.OpenDoor(type))
             {
                 anim.Play();
                 Invoke("DestroyDoor", 3f);

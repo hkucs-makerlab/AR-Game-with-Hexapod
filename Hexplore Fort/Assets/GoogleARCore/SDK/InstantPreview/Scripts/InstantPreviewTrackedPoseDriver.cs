@@ -39,7 +39,7 @@ namespace GoogleARCore
                 return;
             }
 
-            //transform.localPosition = Frame.Pose.position;
+            transform.localPosition = Frame.Pose.position;
             transform.localRotation = Frame.Pose.rotation;
         }
     }

@@ -7,5 +7,5 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/HexploreFort/Scenes/Main.unity
-    guid: 543846417d665364c82655f714e4e26a
+    guid: 1c10cb7f3764c464abbb22065284d63a
   m_configObjects: {}

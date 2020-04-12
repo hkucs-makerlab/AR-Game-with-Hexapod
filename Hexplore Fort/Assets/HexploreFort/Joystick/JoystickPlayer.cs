@@ -9,7 +9,7 @@ public class JoystickPlayer : MonoBehaviour
 
     private void Update()
     {
-        Vector3 direction = transform.GetChild(0).GetChild(0).forward * joystick.Vertical + transform.GetChild(0).GetChild(0).right * joystick.Horizontal;
-        transform.position += direction.normalized * speed;
+        //Vector3 direction = transform.GetChild(0).GetChild(0).forward * joystick.Vertical + transform.GetChild(0).GetChild(0).right * joystick.Horizontal;
+        //transform.position += direction.normalized * speed;
     }
 }
