@@ -2,14 +2,24 @@ package com.hkucsfyp.controller;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 public class ControllerService {
@@ -22,12 +32,16 @@ public class ControllerService {
     public static final int ENABLE_BLUETOOTH = 1;
     private static final UUID HEXAPOD_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private BluetoothAdapter bluetoothAdapter;
+    private BluetoothDiscoveryCallback discoveryCallback;
+    private BluetoothDiscoveryResultCallback discoveryResultCallback;
+    private Map<String, BluetoothDevice> bluetoothDeviceMap;
     private BluetoothDevice bluetoothDevice;
     private BluetoothSocket bluetoothSocket;
     private boolean connected;
+    private boolean connecting;
 
     // Command Handler
-    private static final int REGULAR_TIME_INTERVAL = 1000;
+    private static final int REGULAR_TIME_INTERVAL = 200;
     private Handler regularHandler;
 
     // Command Format
@@ -100,8 +114,12 @@ public class ControllerService {
     private ControllerService(Activity activity) {
         this.activity = activity;
 
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        bluetoothDeviceMap = new HashMap<>();
+        discoveryCallback = new BluetoothDiscoveryCallback();
+        discoveryResultCallback = new BluetoothDiscoveryResultCallback();
         connected = false;
-        initBluetooth();
+        connecting = false;
 
         modeLetter = MODE_LETTER.W;
         modeNumber = MODE_NUMBER.ONE;
@@ -113,43 +131,137 @@ public class ControllerService {
         regularHandler.postDelayed(sendMessage, REGULAR_TIME_INTERVAL);
     }
 
-    private void initBluetooth() {
-        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+    public boolean startDiscovery() {
         if (bluetoothAdapter == null) {
             Toast.makeText(activity, "Bluetooth is not supported", Toast.LENGTH_LONG).show();
         } else if (!bluetoothAdapter.isEnabled()) {
             Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             activity.startActivityForResult(intent, ENABLE_BLUETOOTH);
         } else {
-            connectHexapod();
+            bluetoothDeviceMap.clear();
+            Set<BluetoothDevice> bondedDevices = bluetoothAdapter.getBondedDevices();
+            Iterator<BluetoothDevice> loop = bondedDevices.iterator();
+            while (loop.hasNext()) {
+                BluetoothDevice remoteDevice = loop.next();
+                BluetoothClass bluetoothClass = remoteDevice.getBluetoothClass();
+                if (bluetoothClass.getMajorDeviceClass() == BluetoothClass.Device.Major.UNCATEGORIZED) {
+                    bluetoothDeviceMap.put(remoteDevice.getAddress(), remoteDevice);
+
+
+                    if (handler !=null) {
+                        handler.setResult(remoteDevice);
+                    }
+                }
+            }
+
+            if (!bluetoothAdapter.isDiscovering()) {
+                activity.registerReceiver(discoveryCallback, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_STARTED));
+                activity.registerReceiver(discoveryCallback, new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED));
+                activity.registerReceiver(discoveryResultCallback, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+                bluetoothAdapter.startDiscovery();
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public class BluetoothDiscoveryCallback extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String intentActon = intent.getAction();
+
+            if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(intentActon)) {
+                Toast.makeText(context, "Scanning...", Toast.LENGTH_SHORT).show();
+            } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(intentActon)) {
+                Toast.makeText(context, "Scanning completed", Toast.LENGTH_SHORT).show();
+
+
+                if (handler !=null) {
+                    handler.onPostResult();
+                }
+            }
         }
     }
 
-    public void connectHexapod() {
-        if (!connected) {
+    public class BluetoothDiscoveryResultCallback extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            BluetoothDevice remoteDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+            if (remoteDevice != null) {
+                bluetoothDeviceMap.put(remoteDevice.getAddress(), remoteDevice);
+
+
+                if (handler !=null) {
+                    handler.setResult(remoteDevice);
+                }
+            }
+        }
+    }
+
+    public Map<String, BluetoothDevice> getBluetoothDeviceMap() {
+        return bluetoothDeviceMap;
+    }
+
+    public void connectHexapod(BluetoothDevice bluetoothDevice) {
+        this.bluetoothDevice = bluetoothDevice;
+        BluetoothSocketConnectAsyncTask btSocketConnectAsyncTask = new BluetoothSocketConnectAsyncTask(activity, this.bluetoothDevice);
+        btSocketConnectAsyncTask.execute();
+    }
+
+    //  AsyncTask
+    public class BluetoothSocketConnectAsyncTask extends AsyncTask<Void, Void, String> {
+        private Activity mActivity;
+        private BluetoothDevice mBluetoothDevice;
+
+        public BluetoothSocketConnectAsyncTask(Activity activity, BluetoothDevice bluetoothDevice) {
+            super();
+            this.mActivity = activity;
+            this.mBluetoothDevice = bluetoothDevice;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Toast.makeText(mActivity, "Connecting...", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
             try {
-                bluetoothDevice = bluetoothAdapter.getRemoteDevice("AB:90:78:56:50:9D");
-                bluetoothSocket = bluetoothDevice.createInsecureRfcommSocketToServiceRecord(HEXAPOD_UUID);
-                bluetoothAdapter.cancelDiscovery();
+                bluetoothSocket = mBluetoothDevice.createInsecureRfcommSocketToServiceRecord(HEXAPOD_UUID);
                 bluetoothSocket.connect();
                 connected = true;
-                Toast.makeText(activity, "Connection succeed", Toast.LENGTH_SHORT).show();
-            } catch (Exception e) {
-                Toast.makeText(activity, "Connection failed", Toast.LENGTH_LONG).show();
+                connecting = true;
+            } catch (IOException e) {
+                bluetoothSocket = null;
+                connected = false;
+                connecting = true;
             }
-        } else {
-            Toast.makeText(activity, "Connected", Toast.LENGTH_SHORT).show();
+            return null;
         }
+    }
+
+    public boolean getConnected() {
+        return connected;
     }
 
     private Runnable sendMessage = new Runnable() {
         @Override
         public void run() {
+            if (connecting) {
+                if (connected) {
+                    Toast.makeText(activity, "Connection succeed", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(activity, "Connection failed", Toast.LENGTH_SHORT).show();
+                }
+                connecting = false;
+            }
+
             if (connected) {
                 try {
                     bluetoothSocket.getOutputStream().write(formatMessage());
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    Log.e(TAG, e.toString());
                 }
             }
             regularHandler.postDelayed(this, REGULAR_TIME_INTERVAL);
@@ -192,7 +304,7 @@ public class ControllerService {
         this.modeNumber = modeNumber;
     }
 
-    public void setdPADLetter(DPAD_LETTER dPADLetter) {
+    public void setDPADLetter(DPAD_LETTER dPADLetter) {
         this.dPADLetter = dPADLetter;
     }
 
@@ -202,5 +314,52 @@ public class ControllerService {
 
     public void setBeepDuration(int beepDuration) {
         this.beepDuration = beepDuration;
+    }
+
+    public void stopDiscovery() {
+        if (!bluetoothAdapter.isEnabled()) {
+            return;
+        }
+        if (bluetoothAdapter.isDiscovering()) {
+            bluetoothAdapter.cancelDiscovery();
+            activity.unregisterReceiver(discoveryCallback);
+            activity.unregisterReceiver(discoveryResultCallback);
+        }
+    }
+
+    public void disconnectBluetooth() {
+        try {
+            if (bluetoothSocket.getOutputStream() != null) {
+                bluetoothSocket.getOutputStream().close();
+            }
+            if (bluetoothSocket != null) {
+                bluetoothSocket.close();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, e.toString());
+        } finally {
+            bluetoothSocket = null;
+        }
+        connected = false;
+    }
+
+    public void onDestroy() {
+        regularHandler.removeCallbacks(sendMessage);
+        stopDiscovery();
+        disconnectBluetooth();
+    }
+
+
+    //
+
+    private ResultHandler handler;
+
+    public interface ResultHandler {
+        public void setResult(BluetoothDevice bluetoothDevice);
+        public void onPostResult();
+    }
+
+    public void setResultHandler(ResultHandler handler) {
+        this.handler = handler;
     }
 }
