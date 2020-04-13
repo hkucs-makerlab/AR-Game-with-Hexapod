@@ -2,11 +2,9 @@ package com.hkucsfyp.controller;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
+import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.Button;
@@ -18,6 +16,8 @@ public class MainActivity extends AppCompatActivity {
 
     private ControllerService controllerService;
 
+    static public final int REQUEST_BT_GET_DEVICE = 23;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,8 +25,11 @@ public class MainActivity extends AppCompatActivity {
 
         controllerService = ControllerService.createInstance(MainActivity.this);
 
-        Button btnConnect = findViewById(R.id.btn_connect);
-        btnConnect.setOnClickListener(v -> controllerService.connectHexapod());
+        Button btnScan = findViewById(R.id.btn_scan);
+        btnScan.setOnClickListener(v -> {
+            Intent intent = new Intent(this, BluetoothDevListActivity.class);
+            startActivityForResult(intent, REQUEST_BT_GET_DEVICE);
+        });
 
         for (ControllerService.MODE_LETTER letter : ControllerService.MODE_LETTER.values()) {
             for (ControllerService.MODE_NUMBER number : ControllerService.MODE_NUMBER.values()) {
@@ -46,10 +49,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == ControllerService.ENABLE_BLUETOOTH)
+        if (requestCode == ControllerService.ENABLE_BLUETOOTH) {
             if (resultCode == RESULT_OK) {
-                controllerService.connectHexapod();
+                Intent intent = new Intent(this, BluetoothDevListActivity.class);
+                startActivityForResult(intent, REQUEST_BT_GET_DEVICE);
             }
+        }
+        if (requestCode == REQUEST_BT_GET_DEVICE) {
+            if (resultCode == RESULT_OK) {
+                final BluetoothDevice mBluetoothDevice;
+                mBluetoothDevice = data.getParcelableExtra(BluetoothDevListActivity.EXTRA_KEY_DEVICE);
+                if (mBluetoothDevice == null) {
+                    return;
+                }
+                //
+                if (controllerService.getConnected()) {
+                    controllerService.disconnectBluetooth();
+                }
+                controllerService.connectHexapod(mBluetoothDevice);
+            }
+        }
     }
 
     void setModeListener(ImageButton button, ControllerService.MODE_LETTER letter, ControllerService.MODE_NUMBER number) {
@@ -63,15 +82,21 @@ public class MainActivity extends AppCompatActivity {
         button.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    controllerService.setdPADLetter(letter);
+                    controllerService.setDPADLetter(letter);
                     break;
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL:
-                    controllerService.setdPADLetter(ControllerService.DPAD_LETTER.s);
+                    controllerService.setDPADLetter(ControllerService.DPAD_LETTER.s);
                     break;
             }
             v.performClick();
             return false;
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        controllerService.onDestroy();
     }
 }
