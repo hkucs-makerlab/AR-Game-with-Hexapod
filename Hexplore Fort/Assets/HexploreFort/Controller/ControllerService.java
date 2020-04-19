@@ -50,60 +50,11 @@ public class ControllerService {
     private static final char HEADER = 'V';
     private static final char VERSION = '1';
     private static final int LENGTH = 8;
-    public enum MODE_LETTER {
-        W('W'),
-        D('D'),
-        F('F');
-
-        private char value;
-
-        MODE_LETTER(char value) {
-            this.value = value;
-        }
-
-        public char getValue() {
-            return value;
-        }
-    }
-    public enum MODE_NUMBER {
-        ONE('1'),
-        TWO('2'),
-        THREE('3'),
-        FOUR('4');
-
-        private char value;
-
-        MODE_NUMBER(char value) {
-            this.value = value;
-        }
-
-        public char getValue() {
-            return value;
-        }
-    }
-    public enum DPAD_LETTER {
-        s('s'),
-        f('f'),
-        b('b'),
-        l('l'),
-        r('r'),
-        w('w');
-
-        private char value;
-
-        DPAD_LETTER(char value) {
-            this.value = value;
-        }
-
-        public char getValue() {
-            return value;
-        }
-    }
     private static final char BEEP = 'B';
 
-    private MODE_LETTER modeLetter;
-    private MODE_NUMBER modeNumber;
-    private DPAD_LETTER dPADLetter;
+    private char modeLetter;
+    private char modeNumber;
+    private char dPADLetter;
     private int beepFrequency, beepDuration;
 
     public static final String GAMEOBJECT = "Bluetooth";
@@ -126,9 +77,9 @@ public class ControllerService {
         connected = false;
         connecting = false;
 
-        modeLetter = MODE_LETTER.W;
-        modeNumber = MODE_NUMBER.ONE;
-        dPADLetter = DPAD_LETTER.s;
+        modeLetter = 'W';
+        modeNumber = '1';
+        dPADLetter = 's';
         beepFrequency = 0;
         beepDuration = 0;
 
@@ -231,6 +182,7 @@ public class ControllerService {
                 bluetoothSocket.connect();
                 connected = true;
                 connecting = true;
+                UnityPlayer.UnitySendMessage(GAMEOBJECT, "OnConnectionResult", "Connected");
             } catch (IOException e) {
                 bluetoothSocket = null;
                 connected = false;
@@ -271,9 +223,9 @@ public class ControllerService {
         outputStream.write((byte) HEADER);
         outputStream.write((byte) VERSION);
         outputStream.write((byte) LENGTH);
-        outputStream.write((byte) modeLetter.getValue());
-        outputStream.write((byte) modeNumber.getValue());
-        outputStream.write((byte) dPADLetter.getValue());
+        outputStream.write((byte) modeLetter);
+        outputStream.write((byte) modeNumber);
+        outputStream.write((byte) dPADLetter);
         outputStream.write((byte) BEEP);
 
         int highFreq = (beepFrequency>>8) & 0xff;
@@ -286,22 +238,41 @@ public class ControllerService {
         outputStream.write((byte) highDur);
         outputStream.write((byte) lowDur);
 
-        int checksum = LENGTH + modeLetter.getValue() + modeNumber.getValue() + dPADLetter.getValue() + BEEP + highFreq + lowFreq + highDur + lowDur;
+        int checksum = LENGTH + modeLetter + modeNumber + dPADLetter + BEEP + highFreq + lowFreq + highDur + lowDur;
         checksum = checksum % 256;
         outputStream.write((byte) ((char)checksum));
 
         return outputStream.toByteArray();
     }
 
-    public void setModeLetter(MODE_LETTER modeLetter) {
+    public void setMovement(String movement) {
+        Log.d(TAG, "Change movement to " + movement);
+        if (movement.length() < 3) {
+            return;
+        }
+        setModeLetter(movement.charAt(0));
+        setModeNumber(movement.charAt(1));
+        setDPADLetter(movement.charAt(2));
+    }
+
+    private void setModeLetter(char modeLetter) {
+        if (modeLetter != 'W' && modeLetter != 'D' && modeLetter != 'F') {
+            return;
+        }
         this.modeLetter = modeLetter;
     }
 
-    public void setModeNumber(MODE_NUMBER modeNumber) {
+    private void setModeNumber(char modeNumber) {
+        if (modeNumber != '1' && modeNumber != '2' && modeNumber != '3' && modeNumber != '4') {
+            return;
+        }
         this.modeNumber = modeNumber;
     }
 
-    public void setDPADLetter(DPAD_LETTER dPADLetter) {
+    private void setDPADLetter(char dPADLetter) {
+        if (dPADLetter != 's' && dPADLetter != 'f' && dPADLetter != 'b' && dPADLetter != 'l' && dPADLetter != 'r' && dPADLetter != 'w') {
+            return;
+        }
         this.dPADLetter = dPADLetter;
     }
 
