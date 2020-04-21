@@ -5,11 +5,11 @@ using GoogleARCore;
 
 public class HF_ARCoreVisualizer : MonoBehaviour {
     public AugmentedImage image;
-    public GameObject terrain;
+    public GameObject visualizerObject;
 
     public void Update() {
         if (image == null || image.TrackingState != TrackingState.Tracking) {
-            terrain.SetActive(false);
+            visualizerObject.SetActive(false);
             return;
         }
 
@@ -18,6 +18,6 @@ public class HF_ARCoreVisualizer : MonoBehaviour {
         terrain.transform.localPosition =
             (halfWidth * Vector3.left) + (halfHeight * Vector3.back);
             */
-        terrain.SetActive(true);
+        visualizerObject.SetActive(true);
     }
 }

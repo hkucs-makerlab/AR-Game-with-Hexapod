@@ -272,7 +272,7 @@ namespace GoogleARCore.Examples.Common
                 }
                 else
                 {
-                    m_SnackBarText.text = "Point your camera to where you want to place an object.";
+                    m_SnackBarText.text = "Point your camera to where you want to place the map.";
                     m_OpenButton.SetActive(false);
                 }
             }
