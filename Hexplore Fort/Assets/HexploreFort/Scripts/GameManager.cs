@@ -17,12 +17,12 @@ public class GameManager : MonoBehaviour {
         Application.targetFrameRate = 60;
     }
 
-    public Joystick joystick;
+    public MovementJoystick movementJoystick;
+    public FightingJoystick fightingJoystick;
 
     public Player player = new Player();
     public Text lv, hp, atk, def, money, exp, yellowKey, blueKey, redKey;
 
-    /**
     private void Update()
     {
         lv.text = "" + player.GetLv();
@@ -34,5 +34,10 @@ public class GameManager : MonoBehaviour {
         yellowKey.text = "" + player.GetYellowKey();
         blueKey.text = "" + player.GetBlueKey();
         redKey.text = "" + player.GetRedKey();
-    }**/
+    }
+
+    public void SwitchFighting(bool fight) {
+        movementJoystick.gameObject.transform.parent.gameObject.SetActive(!fight);
+        fightingJoystick.gameObject.transform.parent.gameObject.SetActive(fight);
+    }
 }

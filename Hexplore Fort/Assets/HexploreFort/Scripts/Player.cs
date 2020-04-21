@@ -87,6 +87,12 @@ public class Player : System.Object
         def += 7;
     }
 
+    public void BeingAttack(int atk, int multiplier) {
+        int minus = atk * multiplier - def;
+        minus = minus <= 0 ? 0 : minus;
+        hp -= minus;
+    }
+
     public int GetLv() {
         return lv;
     }

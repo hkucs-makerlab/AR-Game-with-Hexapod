@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7206232026458098635}
   - component: {fileID: 7206232026458098634}
   - component: {fileID: 6663755195607177114}
-  - component: {fileID: 4840738544072562531}
+  - component: {fileID: 5517357052188567581}
   m_Layer: 0
   m_Name: BlueDoor
   m_TagString: Untagged
@@ -79,7 +79,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 7206232026458098634}
   type: 1
---- !u!54 &4840738544072562531
+--- !u!54 &5517357052188567581
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

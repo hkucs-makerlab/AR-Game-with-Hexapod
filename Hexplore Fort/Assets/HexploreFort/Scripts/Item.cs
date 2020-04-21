@@ -7,12 +7,12 @@ public class Item : MonoBehaviour
 {
     public StaticData.ITEM_TYPE type;
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "Player")
-        {
-            GameManager.Instance.player.PickUp(type);
-            Destroy(gameObject);
+    private void OnTriggerStay(Collider other) {
+        if (other.gameObject.tag == "Player") {
+            if (GameManager.Instance.movementJoystick.pickingUp) {
+                GameManager.Instance.player.PickUp(type);
+                Destroy(gameObject);
+            }
         }
     }
 }

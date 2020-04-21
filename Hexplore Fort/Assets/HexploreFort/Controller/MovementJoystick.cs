@@ -9,15 +9,25 @@ public class MovementJoystick : Joystick {
     private StaticData.MODE_NUMBER modeNumber;
     private StaticData.DPAD_LETTER dPadLetter;
 
-    private bool pickingUp;
+    private bool operating;
+    public bool walking, pickingUp, running;
 
     private void OnEnable() {
         Walk();
     }
 
+    private void OnDisable() {
+        operating = false;
+        walking = false;
+        pickingUp = false;
+        running = false;
+
+        ResetInput();
+    }
+
     void Update()
     {
-        if (pickingUp) {
+        if (operating) {
             return;
         }
 
@@ -38,14 +48,17 @@ public class MovementJoystick : Joystick {
     }
 
     public void PickUp() {
-        pickingUp = true;
         modeLetter = StaticData.MODE_LETTER.D;
         modeNumber = StaticData.MODE_NUMBER.THREE;
         dPadLetter = StaticData.DPAD_LETTER.w;
         RobotController.Instance.SetMovementMode(modeLetter, modeNumber, dPadLetter);
+
+        StartCoroutine(Stand());
     }
 
     public void Run() {
+        running = true;
+        walking = false;
         modeLetter = StaticData.MODE_LETTER.W;
         modeNumber = StaticData.MODE_NUMBER.FOUR;
         dPadLetter = StaticData.DPAD_LETTER.s;
@@ -54,9 +67,25 @@ public class MovementJoystick : Joystick {
 
     public void Walk() {
         pickingUp = false;
+        running = false;
+        walking = true;
         modeLetter = StaticData.MODE_LETTER.W;
         modeNumber = StaticData.MODE_NUMBER.ONE;
         dPadLetter = StaticData.DPAD_LETTER.s;
         RobotController.Instance.SetMovementMode(modeLetter, modeNumber, dPadLetter);
+    }
+
+    private IEnumerator Stand() {
+        operating = true;
+        walking = false;
+
+        yield return new WaitForSeconds(StaticData.PICK_UP_TIME);
+
+        pickingUp = true;
+
+        yield return new WaitForSeconds(StaticData.RESET_DELAY_TIME);
+
+        operating = false;
+        Walk();
     }
 }

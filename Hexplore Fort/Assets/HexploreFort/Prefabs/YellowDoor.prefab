@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4098636332694682813}
   - component: {fileID: 4098636332694682812}
   - component: {fileID: 43505292000289004}
-  - component: {fileID: 2291531561892192277}
+  - component: {fileID: 1610399249162361499}
   m_Layer: 0
   m_Name: YellowDoor
   m_TagString: Untagged
@@ -79,7 +79,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 4098636332694682812}
   type: 0
---- !u!54 &2291531561892192277
+--- !u!54 &1610399249162361499
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

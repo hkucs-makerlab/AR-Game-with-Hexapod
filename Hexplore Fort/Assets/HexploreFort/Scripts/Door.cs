@@ -3,18 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using HF_Static;
 
-public class Door : MonoBehaviour
-{
-    public Animation anim;
+public class Door : MonoBehaviour {
     public StaticData.DOOR_TYPE type;
 
-    private void OnCollisionEnter(Collision collision)
-    {
+    private void OnCollisionEnter(Collision collision) {
         if (collision.gameObject.tag == "Player")
         {
             if (GameManager.Instance.player.OpenDoor(type))
             {
-                anim.Play();
+                GetComponent<Animation>().Play();
                 Invoke("DestroyDoor", 3f);
             }
         }

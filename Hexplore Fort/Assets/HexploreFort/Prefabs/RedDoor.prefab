@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8372249215417130921}
   - component: {fileID: 8372249215417130920}
   - component: {fileID: 5497755638483862520}
-  - component: {fileID: 5988762322889573121}
+  - component: {fileID: 6974829044214716009}
   m_Layer: 0
   m_Name: RedDoor
   m_TagString: Untagged
@@ -79,7 +79,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   anim: {fileID: 8372249215417130920}
   type: 2
---- !u!54 &5988762322889573121
+--- !u!54 &6974829044214716009
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

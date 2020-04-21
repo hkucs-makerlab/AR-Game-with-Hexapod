@@ -46,9 +46,44 @@ namespace HF_Static {
             r,
             w
         }
+
+        public enum INSTRUCTION {
+            BUTTON_SHOOT,
+            BUTTON_SKILL,
+            BUTTON_DEFEND,
+            JOYSTICK_UP,
+            JOYSTICK_DOWN,
+            JOYSTICK_LEFT,
+            JOYSTICK_RIGHT
+        }
+
+        public static readonly float TIME_LIMIT = 10f;
+        public static readonly float RESET_DELAY_TIME = 0.5f;
+        public static readonly float FIGHT_OPERATION_TIME = 3f;
+        public static readonly float PICK_UP_TIME = 1.5f;
     }
 
     public static class Randomize {
         public static System.Random random = new System.Random();
+
+        public static List<StaticData.INSTRUCTION> RandomInstruction(int n) {
+            Array values = Enum.GetValues(typeof(StaticData.INSTRUCTION));
+
+            List<StaticData.INSTRUCTION> instructions = new List<StaticData.INSTRUCTION>();
+            for (int i = 0; i < n - 1; i++) {
+                StaticData.INSTRUCTION instruction = (StaticData.INSTRUCTION)values.GetValue(random.Next(values.Length));
+                if (instructions.Count >= 1) {
+                    while (instruction == instructions[instructions.Count - 1]) {
+                        instruction = (StaticData.INSTRUCTION)values.GetValue(random.Next(values.Length));
+                    }
+                }
+                instructions.Add(instruction);
+            }
+
+            StaticData.INSTRUCTION lastOperation = (StaticData.INSTRUCTION)values.GetValue(random.Next(3));
+            instructions.Add(lastOperation);
+
+            return instructions;
+        }
     }
 }
