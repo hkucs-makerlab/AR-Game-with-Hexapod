@@ -17,11 +17,24 @@ public class GameManager : MonoBehaviour {
         Application.targetFrameRate = 60;
     }
 
+    [SerializeField]
     public MovementJoystick movementJoystick;
+    [SerializeField]
     public FightingJoystick fightingJoystick;
+
+    [SerializeField]
+    private GameObject startMenu, arGame;
+    [SerializeField]
+    private Canvas connectionCanvas;
 
     public Player player = new Player();
     public Text lv, hp, atk, def, money, exp, yellowKey, blueKey, redKey;
+
+    private void Start() {
+        //startMenu.SetActive(true);
+        //connectionCanvas.enabled = false;
+        //arGame.SetActive(false);
+    }
 
     private void Update()
     {
@@ -39,5 +52,16 @@ public class GameManager : MonoBehaviour {
     public void SwitchFighting(bool fight) {
         movementJoystick.gameObject.transform.parent.gameObject.SetActive(!fight);
         fightingJoystick.gameObject.transform.parent.gameObject.SetActive(fight);
+    }
+
+
+    public void StartGame() {
+        connectionCanvas.enabled = false;
+        startMenu.SetActive(false);
+        arGame.SetActive(true);
+    }
+
+    public void Exit() {
+        Application.Quit();
     }
 }

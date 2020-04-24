@@ -10,28 +10,27 @@ public class RobotController : MonoBehaviour {
     private static RobotController _instance;
     public static RobotController Instance { get { return _instance; } }
 
-    public GameObject devicePrefab, container;
-    public Canvas blockerCanvas, connectionCanvas;
-    public Button startButton;
-
-    public AndroidJavaObject controllerService;
-
-    private Dictionary<string, string> devices;
-
     private void Awake() {
         if (_instance != null && _instance != this) {
             Destroy(this.gameObject);
         } else {
             _instance = this;
         }
-
-        devices = new Dictionary<string, string>();
     }
+
+    [SerializeField]
+    private GameObject devicePrefab, container;
+
+    public AndroidJavaObject controllerService;
+
+    private Dictionary<string, string> devices;
 
     private void Start() {
         if (!Permission.HasUserAuthorizedPermission(Permission.CoarseLocation)) {
             Permission.RequestUserPermission(Permission.CoarseLocation);
         }
+
+        devices = new Dictionary<string, string>();
 
         AndroidJavaClass activityClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
         AndroidJavaObject activityContext = activityClass.GetStatic<AndroidJavaObject>("currentActivity");
@@ -54,11 +53,11 @@ public class RobotController : MonoBehaviour {
     public void OnScanResult(string result) {
         string[] deviceInfo = result.Split(new[] { "%split%" }, StringSplitOptions.None);
         GameObject newDevice = Instantiate(devicePrefab, container.transform);
-        newDevice.transform.GetChild(0).gameObject.GetComponent<Text>().text = deviceInfo[0];
+        newDevice.transform.GetChild(1).gameObject.GetComponentInChildren<Text>().text = deviceInfo[0];
         if (deviceInfo[1] == "null") {
-            newDevice.transform.GetChild(2).gameObject.GetComponent<Text>().text = "Unknown";
+            newDevice.transform.GetChild(0).gameObject.GetComponent<Text>().text = "Unknown";
         } else {
-            newDevice.transform.GetChild(2).gameObject.GetComponent<Text>().text = deviceInfo[1];
+            newDevice.transform.GetChild(0).gameObject.GetComponent<Text>().text = deviceInfo[1];
         }
         newDevice.GetComponent<Button>().onClick.AddListener(() => ConnectHexapod(deviceInfo[0]));
     }
@@ -71,9 +70,7 @@ public class RobotController : MonoBehaviour {
 
     public void OnConnectionResult(string result) {
         if (result == "Connected") {
-            startButton.interactable = true;
-            blockerCanvas.enabled = false;
-            connectionCanvas.enabled = false;
+            GameManager.Instance.StartGame();
         }
     }
 

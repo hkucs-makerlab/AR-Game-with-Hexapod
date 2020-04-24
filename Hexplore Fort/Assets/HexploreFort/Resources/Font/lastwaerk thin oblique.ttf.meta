@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: b850587f1a9e155408a85c071e7df354
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Lastwaerk thin
+  fontNames:
+  - Lastwaerk thin
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 779761305bfc9ba4681534efa0f5cd30, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

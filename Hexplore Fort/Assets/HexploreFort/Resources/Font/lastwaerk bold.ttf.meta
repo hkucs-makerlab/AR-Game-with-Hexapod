@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 09ff688445f428442b52cf7e8cdbab7b
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Lastwaerk bold
+  fontNames:
+  - Lastwaerk bold
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 027fea5130f26154185fbbd3eda605e9, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
