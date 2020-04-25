@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using HF_Static;
 
 public class GameManager : MonoBehaviour {
     private static GameManager _instance;
@@ -27,38 +28,113 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     private Canvas connectionCanvas;
 
+    [SerializeField]
+    private GameObject planeController;
+    [SerializeField]
+    private GameObject[] planeVisualizer;
+    [SerializeField]
+    private GameObject imageController;
+    [SerializeField]
+    private GameObject[] imageVisualizer;
+
+    [SerializeField]
+    private GameObject gameCanvas, keys;
+
     public Player player = new Player();
-    public Text lv, hp, atk, def, money, exp, yellowKey, blueKey, redKey;
+    private StaticData.GAME_PROGRESS progress;
 
     private void Start() {
-        //startMenu.SetActive(true);
-        //connectionCanvas.enabled = false;
-        //arGame.SetActive(false);
+        ChangeProgress(StaticData.GAME_PROGRESS.START_MENU);
     }
 
-    private void Update()
-    {
-        lv.text = "" + player.GetLv();
-        hp.text = "" + player.GetHp();
-        atk.text = "" + player.GetAtk();
-        def.text = "" + player.GetDef();
-        money.text = "" + player.GetMoney();
-        exp.text = "" + player.GetExp();
-        yellowKey.text = "" + player.GetYellowKey();
-        blueKey.text = "" + player.GetBlueKey();
-        redKey.text = "" + player.GetRedKey();
+    public void ChangeProgress(StaticData.GAME_PROGRESS toProgress) {
+        switch (toProgress) {
+            case StaticData.GAME_PROGRESS.START_MENU:
+                startMenu.SetActive(true);
+                arGame.SetActive(false);
+                break;
+            case StaticData.GAME_PROGRESS.MAP_GENERATION:
+                arGame.SetActive(true);
+                planeController.SetActive(true);
+                foreach (GameObject visualizer in planeVisualizer) {
+                    visualizer.SetActive(true);
+                }
+                startMenu.SetActive(false);
+                imageController.SetActive(false);
+                foreach (GameObject visualizer in imageVisualizer) {
+                    visualizer.SetActive(false);
+                }
+                gameCanvas.SetActive(false);
+                movementJoystick.gameObject.transform.parent.gameObject.SetActive(false);
+                fightingJoystick.gameObject.transform.parent.gameObject.SetActive(false);
+                break;
+            case StaticData.GAME_PROGRESS.ROBOT_RECOGNITION:
+                arGame.SetActive(true);
+                imageController.SetActive(true);
+                foreach (GameObject visualizer in imageVisualizer) {
+                    visualizer.SetActive(true);
+                }
+                planeController.SetActive(true);
+                foreach (GameObject visualizer in planeVisualizer) {
+                    visualizer.SetActive(false);
+                }
+                startMenu.SetActive(false);
+                gameCanvas.SetActive(false);
+                movementJoystick.gameObject.transform.parent.gameObject.SetActive(false);
+                fightingJoystick.gameObject.transform.parent.gameObject.SetActive(false);
+                break;
+            case StaticData.GAME_PROGRESS.MOVING:
+                arGame.SetActive(true);
+                gameCanvas.SetActive(true);
+                movementJoystick.gameObject.transform.parent.gameObject.SetActive(true);
+                fightingJoystick.gameObject.transform.parent.gameObject.SetActive(false);
+                imageController.SetActive(true);
+                foreach (GameObject visualizer in imageVisualizer) {
+                    visualizer.SetActive(false);
+                }
+                planeController.SetActive(true);
+                foreach (GameObject visualizer in planeVisualizer) {
+                    visualizer.SetActive(false);
+                }
+                startMenu.SetActive(false);
+                break;
+            case StaticData.GAME_PROGRESS.FIGHTING:
+                arGame.SetActive(true);
+                gameCanvas.SetActive(true);
+                fightingJoystick.gameObject.transform.parent.gameObject.SetActive(true);
+                movementJoystick.gameObject.transform.parent.gameObject.SetActive(false);
+                imageController.SetActive(true);
+                foreach (GameObject visualizer in imageVisualizer) {
+                    visualizer.SetActive(false);
+                }
+                planeController.SetActive(true);
+                foreach (GameObject visualizer in planeVisualizer) {
+                    visualizer.SetActive(false);
+                }
+                startMenu.SetActive(false);
+                break;
+        }
+        progress = toProgress;
     }
-
-    public void SwitchFighting(bool fight) {
-        movementJoystick.gameObject.transform.parent.gameObject.SetActive(!fight);
-        fightingJoystick.gameObject.transform.parent.gameObject.SetActive(fight);
-    }
-
 
     public void StartGame() {
         connectionCanvas.enabled = false;
-        startMenu.SetActive(false);
-        arGame.SetActive(true);
+        Time.timeScale = 1;
+        if (progress == StaticData.GAME_PROGRESS.START_MENU) {
+            ChangeProgress(StaticData.GAME_PROGRESS.MAP_GENERATION);
+        }
+    }
+
+    public void OpenSetting() {
+        Time.timeScale = 0;
+    }
+
+    public void CloseSetting() {
+        Time.timeScale = 1;
+    }
+
+    public void ShowKey() {
+        keys.SetActive(!keys.activeSelf);
     }
 
     public void Exit() {

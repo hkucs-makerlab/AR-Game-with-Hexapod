@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using GoogleARCore;
+using HF_Static;
 
 public class HF_ARCorePlaneController : MonoBehaviour {
     public Camera FirstPersonCamera;
@@ -50,6 +51,8 @@ public class HF_ARCorePlaneController : MonoBehaviour {
 
                 // Make game object a child of the anchor.
                 visualizer.transform.parent = anchor.transform;
+
+                GameManager.Instance.ChangeProgress(StaticData.GAME_PROGRESS.ROBOT_RECOGNITION);
             }
         }
     }

@@ -64,6 +64,9 @@ public class RobotController : MonoBehaviour {
 
     public void ConnectHexapod(string address) {
         if (controllerService != null) {
+            foreach (Transform child in container.transform) {
+                child.gameObject.GetComponent<Button>().interactable = false;
+            }
             controllerService.Call("connectHexapod", address);
         }
     }
@@ -71,6 +74,10 @@ public class RobotController : MonoBehaviour {
     public void OnConnectionResult(string result) {
         if (result == "Connected") {
             GameManager.Instance.StartGame();
+        } else {
+            foreach (Transform child in container.transform) {
+                child.gameObject.GetComponent<Button>().interactable = true;
+            }
         }
     }
 
@@ -79,5 +86,9 @@ public class RobotController : MonoBehaviour {
         if (controllerService != null) {
             controllerService.Call("setMovement", movement);
         }
+    }
+
+    private void OnDestroy() {
+        controllerService.Call("setMovement");
     }
 }

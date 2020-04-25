@@ -187,6 +187,7 @@ public class ControllerService {
                 bluetoothSocket = null;
                 connected = false;
                 connecting = true;
+                UnityPlayer.UnitySendMessage(GAMEOBJECT, "OnConnectionResult", "Failed");
             }
             return null;
         }

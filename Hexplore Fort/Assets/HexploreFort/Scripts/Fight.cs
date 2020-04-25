@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using HF_Static;
 
 public class Fight : MonoBehaviour {
     public Enemy enemy = new Enemy();
@@ -44,7 +45,7 @@ public class Fight : MonoBehaviour {
         if (collision.gameObject.tag == "Player") {
             playerObj = collision.gameObject.GetComponent<VirtualPlayer>();
             animator.SetBool("isReady", true);
-            GameManager.Instance.SwitchFighting(true);
+            GameManager.Instance.ChangeProgress(StaticData.GAME_PROGRESS.FIGHTING);
             joystick.SetNoOfInstruction(this);
         }
     }
@@ -56,11 +57,13 @@ public class Fight : MonoBehaviour {
             yield return new WaitForSeconds(1f);
         }
 
-        yield return new WaitForSeconds(2f);
+        joystick.Celebrate();
+        //enemy died animation
+        yield return new WaitForSeconds(StaticData.FIGHT_OPERATION_TIME);
 
         CancelInvoke();
         playerObj.EndFight();
-        GameManager.Instance.SwitchFighting(false);
+        GameManager.Instance.ChangeProgress(StaticData.GAME_PROGRESS.MOVING);
         Destroy(gameObject);
     }
 

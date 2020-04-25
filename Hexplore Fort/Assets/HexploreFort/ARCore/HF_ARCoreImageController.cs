@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using GoogleARCore;
+using HF_Static;
 
 public class HF_ARCoreImageController : MonoBehaviour {
     public HF_ARCoreVisualizer visualizerPrefab;
@@ -27,11 +28,13 @@ public class HF_ARCoreImageController : MonoBehaviour {
                 visualizer = (HF_ARCoreVisualizer)Instantiate(visualizerPrefab, anchor.transform);
                 visualizer.image = image;
                 visualizers.Add(image.DatabaseIndex, visualizer);
-            } 
-            /**else if (image.TrackingState == TrackingState.Stopped && visualizer != null) {
+                GameManager.Instance.ChangeProgress(StaticData.GAME_PROGRESS.MOVING);
+            } else if (image.TrackingState == TrackingState.Stopped && visualizer != null) {
                 visualizers.Remove(image.DatabaseIndex);
                 GameObject.Destroy(visualizer.gameObject);
-            }**/
+
+                GameManager.Instance.ChangeProgress(StaticData.GAME_PROGRESS.ROBOT_RECOGNITION);
+            }
         }
 
         // Show the fit-to-scan overlay if there are no images that are Tracking.

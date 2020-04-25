@@ -23,6 +23,13 @@ namespace HF_Static {
             RED_DOOR
         }
 
+        public enum GAME_PROGRESS {
+            START_MENU,
+            MAP_GENERATION,
+            ROBOT_RECOGNITION,
+            MOVING,
+            FIGHTING
+        }
 
         public enum MODE_LETTER {
             W,
