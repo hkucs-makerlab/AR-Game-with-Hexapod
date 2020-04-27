@@ -10,7 +10,7 @@ public class PlayerStat : MonoBehaviour
 
     private Player player;
 
-    private void Start() {
+    private void OnEnable() {
         player = GameManager.Instance.player;
     }
 

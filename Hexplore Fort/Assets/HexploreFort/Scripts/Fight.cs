@@ -5,7 +5,6 @@ using HF_Static;
 
 public class Fight : MonoBehaviour {
     public Enemy enemy = new Enemy();
-    public GameObject checkpoint;
 
     private FightingJoystick joystick;
     private Animator animator;
@@ -64,6 +63,9 @@ public class Fight : MonoBehaviour {
 
         CancelInvoke();
         playerObj.EndFight();
+        player.DefeatEnemy(1, 1);
+        int indexOfCheckpoint = InitializeMap.Instance.map.DefeatEnemy(transform.GetSiblingIndex());
+        InitializeMap.Instance.checkpoints.transform.GetChild(indexOfCheckpoint).gameObject.SetActive(false);
         GameManager.Instance.ChangeProgress(StaticData.GAME_PROGRESS.MOVING);
         Destroy(gameObject);
     }

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using HF_Static;
 
+[System.Serializable]
 public class Player : System.Object
 {
     int lv, hp, atk, def, money, exp, yellowKey, blueKey, redKey;
-    List<int> exploredCheckpoint;
 
     public Player() {
         lv = 1;
@@ -18,7 +18,6 @@ public class Player : System.Object
         yellowKey = 0;
         blueKey = 0;
         redKey = 0;
-        exploredCheckpoint = new List<int>();
     }
 
     public void PickUp(StaticData.ITEM_TYPE type) {
@@ -53,34 +52,38 @@ public class Player : System.Object
                 money += 200;
                 break;
         }
+
+        SaveSystem.SavePlayer(this);
     }
 
     public bool OpenDoor(StaticData.DOOR_TYPE type) {
+        bool canOpen = false;
         switch (type) {
             case StaticData.DOOR_TYPE.YELLOW_DOOR:
                 if (yellowKey > 0)
                 {
                     yellowKey--;
-                    return true;
+                    canOpen = true;
                 }
                 break;
             case StaticData.DOOR_TYPE.BLUE_DOOR:
                 if (blueKey > 0)
                 {
                     blueKey--;
-                    return true;
+                    canOpen = true;
                 }
                 break;
             case StaticData.DOOR_TYPE.RED_DOOR:
                 if (redKey > 0)
                 {
                     redKey--;
-                    return true;
+                    canOpen = true;
                 }
                 break;
         }
 
-        return false;
+        SaveSystem.SavePlayer(this);
+        return canOpen;
     }
 
     public void LevelUp() {
@@ -95,10 +98,10 @@ public class Player : System.Object
         hp -= minus;
     }
 
-    public void ExploreCheckpoint(int i) {
-        if (!exploredCheckpoint.Contains(i)) {
-            exploredCheckpoint.Add(i);
-        }
+    public void DefeatEnemy(int gold, int exp) {
+        this.money += gold;
+        this.exp += exp;
+        SaveSystem.SavePlayer(this);
     }
 
     public int GetLv() {

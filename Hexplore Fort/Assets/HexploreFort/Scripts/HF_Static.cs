@@ -1,6 +1,8 @@
 ﻿using System;
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
 namespace HF_Static {
@@ -64,6 +66,11 @@ namespace HF_Static {
             JOYSTICK_RIGHT
         }
 
+        public enum CHECKPOINT {
+            DOOR,
+            ENEMY
+        }
+
         public static readonly float TIME_LIMIT = 10f;
         public static readonly float RESET_DELAY_TIME = 0.5f;
         public static readonly float FIGHT_OPERATION_TIME = 3f;
@@ -95,6 +102,49 @@ namespace HF_Static {
     }
 
     public static class SaveSystem {
+        public static void SavePlayer(Player player) {
+            BinaryFormatter formatter = new BinaryFormatter();
+            string path = Application.persistentDataPath + "/Player.LocalSaving";
+            FileStream stream = new FileStream(path, FileMode.Create);
+            formatter.Serialize(stream, player);
+            stream.Close();
+        }
 
+        public static Player LoadPlayerInfo() {
+            string path = Application.persistentDataPath + "/Player.LocalSaving";
+            if (File.Exists(path)) {
+                BinaryFormatter formatter = new BinaryFormatter();
+                FileStream stream = new FileStream(path, FileMode.Open);
+                Player player = (Player)formatter.Deserialize(stream);
+                stream.Close();
+                return player;
+            }
+            return null;
+        }
+
+        public static void SaveMap(Map map) {
+            BinaryFormatter formatter = new BinaryFormatter();
+            string path = Application.persistentDataPath + "/Map.LocalSaving";
+            FileStream stream = new FileStream(path, FileMode.Create);
+            formatter.Serialize(stream, map);
+            stream.Close();
+        }
+
+        public static Map LoadMapInfo() {
+            string path = Application.persistentDataPath + "/Map.LocalSaving";
+            if (File.Exists(path)) {
+                BinaryFormatter formatter = new BinaryFormatter();
+                FileStream stream = new FileStream(path, FileMode.Open);
+                Map map = (Map)formatter.Deserialize(stream);
+                stream.Close();
+                return map;
+            }
+            return null;
+        }
+
+        public static void DeleteAllData() {
+            File.Delete(Application.persistentDataPath + "/Player.LocalSaving");
+            File.Delete(Application.persistentDataPath + "/Map.LocalSaving");
+        }
     }
 }

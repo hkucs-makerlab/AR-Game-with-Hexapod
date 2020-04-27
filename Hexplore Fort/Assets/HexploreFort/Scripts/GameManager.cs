@@ -26,6 +26,9 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     private GameObject startMenu, arGame;
     [SerializeField]
+    private Button continueButton;
+    private bool newGame;
+    [SerializeField]
     private Canvas connectionCanvas;
 
     [SerializeField]
@@ -39,11 +42,19 @@ public class GameManager : MonoBehaviour {
 
     [SerializeField]
     private GameObject gameCanvas, keys;
+    [SerializeField]
+    public GameObject warningWindow;
 
-    public Player player = new Player();
+    public Player player;
     public StaticData.GAME_PROGRESS progress;
 
     private void Start() {
+        player = SaveSystem.LoadPlayerInfo();
+        continueButton.interactable = true;
+        if (player == null) {
+            player = new Player();
+            continueButton.interactable = false;
+        }
         ChangeProgress(StaticData.GAME_PROGRESS.START_MENU);
     }
 
@@ -65,6 +76,7 @@ public class GameManager : MonoBehaviour {
                 foreach (GameObject visualizer in imageVisualizer) {
                     visualizer.SetActive(false);
                 }
+                warningWindow.SetActive(false);
                 gameCanvas.SetActive(false);
                 movementJoystick.gameObject.transform.parent.gameObject.SetActive(false);
                 fightingJoystick.gameObject.transform.parent.gameObject.SetActive(false);
@@ -119,8 +131,20 @@ public class GameManager : MonoBehaviour {
         progress = toProgress;
     }
 
+    public void NewGame(bool newGame) {
+        this.newGame = newGame;
+    }
+
     public void StartGame() {
         connectionCanvas.enabled = false;
+        continueButton.interactable = true;
+        if (newGame) {
+            SaveSystem.DeleteAllData();
+            player = new Player();
+            SaveSystem.SavePlayer(player);
+            newGame = false;
+        }
+
         if (progress == StaticData.GAME_PROGRESS.START_MENU) {
             ChangeProgress(StaticData.GAME_PROGRESS.MAP_GENERATION);
         } else {
