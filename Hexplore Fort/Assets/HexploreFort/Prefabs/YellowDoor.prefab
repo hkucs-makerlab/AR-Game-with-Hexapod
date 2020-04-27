@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1610399249162361499}
   m_Layer: 0
   m_Name: YellowDoor
-  m_TagString: Untagged
+  m_TagString: Door
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -77,7 +77,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ad50ddddab642048b3c1044cc7cfd38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  anim: {fileID: 4098636332694682812}
   type: 0
 --- !u!54 &1610399249162361499
 Rigidbody:

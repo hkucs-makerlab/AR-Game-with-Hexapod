@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour {
     private Canvas connectionCanvas;
 
     [SerializeField]
-    private GameObject planeController;
+    public GameObject planeController;
     [SerializeField]
     private GameObject[] planeVisualizer;
     [SerializeField]
@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour {
     private GameObject gameCanvas, keys;
 
     public Player player = new Player();
-    private StaticData.GAME_PROGRESS progress;
+    public StaticData.GAME_PROGRESS progress;
 
     private void Start() {
         ChangeProgress(StaticData.GAME_PROGRESS.START_MENU);
@@ -56,6 +56,7 @@ public class GameManager : MonoBehaviour {
             case StaticData.GAME_PROGRESS.MAP_GENERATION:
                 arGame.SetActive(true);
                 planeController.SetActive(true);
+                planeController.GetComponent<HF_ARCorePlaneController>().Retrack();
                 foreach (GameObject visualizer in planeVisualizer) {
                     visualizer.SetActive(true);
                 }
@@ -71,6 +72,7 @@ public class GameManager : MonoBehaviour {
             case StaticData.GAME_PROGRESS.ROBOT_RECOGNITION:
                 arGame.SetActive(true);
                 imageController.SetActive(true);
+                imageController.GetComponent<HF_ARCoreImageController>().Retrack();
                 foreach (GameObject visualizer in imageVisualizer) {
                     visualizer.SetActive(true);
                 }
@@ -119,18 +121,23 @@ public class GameManager : MonoBehaviour {
 
     public void StartGame() {
         connectionCanvas.enabled = false;
-        Time.timeScale = 1;
         if (progress == StaticData.GAME_PROGRESS.START_MENU) {
             ChangeProgress(StaticData.GAME_PROGRESS.MAP_GENERATION);
+        } else {
+            CloseSetting();
         }
     }
 
     public void OpenSetting() {
         Time.timeScale = 0;
+        RobotController.Instance.StopMovement();
     }
 
-    public void CloseSetting() {
+    public void CloseSetting(bool continueMove = true) {
         Time.timeScale = 1;
+        if (continueMove) {
+            RobotController.Instance.ContinuePreviousMovement();
+        }
     }
 
     public void ShowKey() {

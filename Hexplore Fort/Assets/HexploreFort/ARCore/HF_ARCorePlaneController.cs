@@ -9,7 +9,7 @@ public class HF_ARCorePlaneController : MonoBehaviour {
     public Camera FirstPersonCamera;
     public GameObject visualizerPrefab;
 
-    private GameObject visualizer;
+    public GameObject visualizer;
 
     public void Update() {
         _UpdateApplicationLifecycle();
@@ -63,6 +63,12 @@ public class HF_ARCorePlaneController : MonoBehaviour {
             Screen.sleepTimeout = SleepTimeout.SystemSetting;
         } else {
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
+        }
+    }
+
+    public void Retrack() {
+        if (visualizer) {
+            Destroy(visualizer.transform.parent.gameObject);
         }
     }
 }

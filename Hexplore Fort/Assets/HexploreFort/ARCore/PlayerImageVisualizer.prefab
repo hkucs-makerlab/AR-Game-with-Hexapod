@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   visualizerObject: {fileID: 1352271435519130633}
+  map: {fileID: 0}
 --- !u!1001 &7151899472383233740
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -93,4 +93,8 @@ namespace HF_Static {
             return instructions;
         }
     }
+
+    public static class SaveSystem {
+
+    }
 }

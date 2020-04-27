@@ -9,7 +9,7 @@ public class MovementJoystick : Joystick {
     private StaticData.MODE_NUMBER modeNumber;
     private StaticData.DPAD_LETTER dPadLetter;
 
-    private bool operating;
+    private bool operating, blockFront, blockBack;
     public bool walking, pickingUp, running;
 
     private void OnEnable() {
@@ -38,6 +38,12 @@ public class MovementJoystick : Joystick {
                 newDPadLetter = Horizontal > 0 ? StaticData.DPAD_LETTER.r : StaticData.DPAD_LETTER.l;
             } else {
                 newDPadLetter = Vertical > 0 ? StaticData.DPAD_LETTER.f : StaticData.DPAD_LETTER.b;
+                if (blockFront && newDPadLetter == StaticData.DPAD_LETTER.f) {
+                    newDPadLetter = StaticData.DPAD_LETTER.s;
+                }
+                if (blockBack && newDPadLetter == StaticData.DPAD_LETTER.b) {
+                    newDPadLetter = StaticData.DPAD_LETTER.s;
+                }
             }
         }
 
@@ -87,5 +93,13 @@ public class MovementJoystick : Joystick {
 
         operating = false;
         Walk();
+    }
+
+    public void DetectedWall(bool front, bool detected) {
+        if (front) {
+            blockFront = detected;
+        } else {
+            blockBack = detected;
+        }
     }
 }

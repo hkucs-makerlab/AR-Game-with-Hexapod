@@ -5,6 +5,7 @@ using HF_Static;
 
 public class Fight : MonoBehaviour {
     public Enemy enemy = new Enemy();
+    public GameObject checkpoint;
 
     private FightingJoystick joystick;
     private Animator animator;
@@ -42,7 +43,7 @@ public class Fight : MonoBehaviour {
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Player") {
+        if (collision.gameObject.tag == "Player" && !playerObj && GameManager.Instance.progress != StaticData.GAME_PROGRESS.FIGHTING) {
             playerObj = collision.gameObject.GetComponent<VirtualPlayer>();
             animator.SetBool("isReady", true);
             GameManager.Instance.ChangeProgress(StaticData.GAME_PROGRESS.FIGHTING);

@@ -24,6 +24,7 @@ public class RobotController : MonoBehaviour {
     public AndroidJavaObject controllerService;
 
     private Dictionary<string, string> devices;
+    private string previousMovement = "W1s";
 
     private void Start() {
         if (!Permission.HasUserAuthorizedPermission(Permission.CoarseLocation)) {
@@ -63,6 +64,10 @@ public class RobotController : MonoBehaviour {
     }
 
     public void ConnectHexapod(string address) {
+        StopDiscovery();
+        StopMovement();
+        Disconnect();
+
         if (controllerService != null) {
             foreach (Transform child in container.transform) {
                 child.gameObject.GetComponent<Button>().interactable = false;
@@ -72,12 +77,12 @@ public class RobotController : MonoBehaviour {
     }
 
     public void OnConnectionResult(string result) {
+        foreach (Transform child in container.transform) {
+            child.gameObject.GetComponent<Button>().interactable = true;
+        }
+
         if (result == "Connected") {
             GameManager.Instance.StartGame();
-        } else {
-            foreach (Transform child in container.transform) {
-                child.gameObject.GetComponent<Button>().interactable = true;
-            }
         }
     }
 
@@ -85,10 +90,38 @@ public class RobotController : MonoBehaviour {
         string movement = modeLetter.ToString() + (int)modeNumber + dPadLetter.ToString();
         if (controllerService != null) {
             controllerService.Call("setMovement", movement);
+            previousMovement = movement;
+        }
+    }
+
+    public void StopMovement() {
+        string movement = StaticData.MODE_LETTER.W.ToString() + (int)StaticData.MODE_NUMBER.ONE + StaticData.DPAD_LETTER.s.ToString();
+        if (controllerService != null) {
+            controllerService.Call("setMovement", movement);
+        }
+    }
+
+    public void ContinuePreviousMovement() {
+        if (controllerService != null) {
+            controllerService.Call("setMovement", previousMovement);
+        }
+    }
+
+    private void StopDiscovery() {
+        if (controllerService != null) {
+            controllerService.Call("stopDiscovery");
+        }
+    }
+
+    public void Disconnect() {
+        if (controllerService != null) {
+            controllerService.Call("disconnectBluetooth");
         }
     }
 
     private void OnDestroy() {
-        controllerService.Call("setMovement");
+        if (controllerService != null) {
+            controllerService.Call("onDestroy");
+        }
     }
 }

@@ -10,12 +10,8 @@ public class Setting : MonoBehaviour
         Debug.Log(volume.value);
     }
 
-    public void ReconnectHexapod() {
-        Time.timeScale = 0;
-    }
-
     public void ChangeProgress(int i) {
-        gameObject.SetActive(false);
+        GameManager.Instance.CloseSetting(false);
         StaticData.GAME_PROGRESS newProgress = (StaticData.GAME_PROGRESS)i;
         GameManager.Instance.ChangeProgress(newProgress);
     }

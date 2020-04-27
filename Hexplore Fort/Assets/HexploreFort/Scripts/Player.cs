@@ -6,6 +6,7 @@ using HF_Static;
 public class Player : System.Object
 {
     int lv, hp, atk, def, money, exp, yellowKey, blueKey, redKey;
+    List<int> exploredCheckpoint;
 
     public Player() {
         lv = 1;
@@ -17,6 +18,7 @@ public class Player : System.Object
         yellowKey = 0;
         blueKey = 0;
         redKey = 0;
+        exploredCheckpoint = new List<int>();
     }
 
     public void PickUp(StaticData.ITEM_TYPE type) {
@@ -91,6 +93,12 @@ public class Player : System.Object
         int minus = atk * multiplier - def;
         minus = minus <= 0 ? 0 : minus;
         hp -= minus;
+    }
+
+    public void ExploreCheckpoint(int i) {
+        if (!exploredCheckpoint.Contains(i)) {
+            exploredCheckpoint.Add(i);
+        }
     }
 
     public int GetLv() {

@@ -27,13 +27,12 @@ public class HF_ARCoreImageController : MonoBehaviour {
                 Anchor anchor = image.CreateAnchor(image.CenterPose);
                 visualizer = (HF_ARCoreVisualizer)Instantiate(visualizerPrefab, anchor.transform);
                 visualizer.image = image;
+                visualizer.map = GameManager.Instance.planeController.GetComponent<HF_ARCorePlaneController>().visualizer;
                 visualizers.Add(image.DatabaseIndex, visualizer);
                 GameManager.Instance.ChangeProgress(StaticData.GAME_PROGRESS.MOVING);
             } else if (image.TrackingState == TrackingState.Stopped && visualizer != null) {
                 visualizers.Remove(image.DatabaseIndex);
                 GameObject.Destroy(visualizer.gameObject);
-
-                GameManager.Instance.ChangeProgress(StaticData.GAME_PROGRESS.ROBOT_RECOGNITION);
             }
         }
 
@@ -55,5 +54,14 @@ public class HF_ARCoreImageController : MonoBehaviour {
         } else {
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
         }
+    }
+
+    public void Retrack() {
+        foreach (KeyValuePair<int, HF_ARCoreVisualizer> visualizer in visualizers) {
+            if (visualizer.Value != null) {
+                Destroy(visualizer.Value.gameObject.transform.parent.gameObject);
+            }
+        }
+        visualizers.Clear();
     }
 }

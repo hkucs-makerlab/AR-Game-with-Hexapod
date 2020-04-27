@@ -5,19 +5,13 @@ using HF_Static;
 
 public class Door : MonoBehaviour {
     public StaticData.DOOR_TYPE type;
+    public GameObject checkpoint;
 
-    private void OnCollisionEnter(Collision collision) {
-        if (collision.gameObject.tag == "Player")
-        {
-            if (GameManager.Instance.player.OpenDoor(type))
-            {
-                GetComponent<Animation>().Play();
-                Invoke("DestroyDoor", 3f);
-            }
-        }
-    }
+    public IEnumerator Open() {
+        GetComponent<Animation>().Play();
 
-    private void DestroyDoor() {
+        yield return new WaitForSeconds(3f);
+
         Destroy(gameObject);
     }
 }
