@@ -226,14 +226,16 @@ public class FightingJoystick : Joystick {
         }
         RobotController.Instance.SetMovementMode(modeLetter, modeNumber, dPadLetter);
 
-        StartCoroutine(Stand());
+        StartCoroutine(Stand(false));
     }
 
-    private IEnumerator Stand() {
+    private IEnumerator Stand(bool showResult = true) {
         operating = true;
-        combo++;
-        instructionResult.GetComponent<Text>().text = "COMBO x" + combo;
-        instructionResult.GetComponent<Animation>().Play("InstructionPerfect");
+        if (showResult) {
+            combo++;
+            instructionResult.GetComponent<Text>().text = "COMBO x" + combo;
+            instructionResult.GetComponent<Animation>().Play("InstructionPerfect");
+        }
 
         yield return new WaitForSeconds(StaticData.FIGHT_OPERATION_TIME);
 
@@ -242,7 +244,7 @@ public class FightingJoystick : Joystick {
         dPadLetter = StaticData.DPAD_LETTER.s;
         RobotController.Instance.SetMovementMode(modeLetter, modeNumber, dPadLetter);
 
-        if (fight && fight.enemy.GetHp() > 0) {
+        if (!showResult) {
             yield return new WaitForSeconds(StaticData.RESET_DELAY_TIME);
 
             operating = false;

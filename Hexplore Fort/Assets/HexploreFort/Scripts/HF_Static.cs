@@ -25,12 +25,19 @@ namespace HF_Static {
             RED_DOOR
         }
 
+        public enum ENEMY_TYPE {
+            isArcher,
+            isWeaponed,
+            isPuncher
+        }
+
         public enum GAME_PROGRESS {
             START_MENU,
             MAP_GENERATION,
             ROBOT_RECOGNITION,
             MOVING,
-            FIGHTING
+            FIGHTING,
+            WINNING
         }
 
         public enum MODE_LETTER {

@@ -32,23 +32,15 @@ public class GameManager : MonoBehaviour {
     private Canvas connectionCanvas;
 
     [SerializeField]
-    public GameObject planeController;
-    [SerializeField]
-    private GameObject[] planeVisualizer;
-    [SerializeField]
-    private GameObject imageController;
-    [SerializeField]
-    private GameObject[] imageVisualizer;
-
-    [SerializeField]
     private GameObject gameCanvas, keys;
     [SerializeField]
-    public GameObject warningWindow;
+    public GameObject warningWindow, winningWindow;
 
     public Player player;
     public StaticData.GAME_PROGRESS progress;
 
     private void Start() {
+        //SaveSystem.DeleteAllData();
         player = SaveSystem.LoadPlayerInfo();
         continueButton.interactable = true;
         if (player == null) {
@@ -63,35 +55,22 @@ public class GameManager : MonoBehaviour {
             case StaticData.GAME_PROGRESS.START_MENU:
                 startMenu.SetActive(true);
                 arGame.SetActive(false);
+                RobotController.Instance.StopMovement();
                 break;
             case StaticData.GAME_PROGRESS.MAP_GENERATION:
+                HF_ARCoreController.Instance.ResetTracking();
                 arGame.SetActive(true);
-                planeController.SetActive(true);
-                planeController.GetComponent<HF_ARCorePlaneController>().Retrack();
-                foreach (GameObject visualizer in planeVisualizer) {
-                    visualizer.SetActive(true);
-                }
+                HF_ARCoreController.Instance.SwitchToPlaneDetection();
                 startMenu.SetActive(false);
-                imageController.SetActive(false);
-                foreach (GameObject visualizer in imageVisualizer) {
-                    visualizer.SetActive(false);
-                }
                 warningWindow.SetActive(false);
+                winningWindow.SetActive(false);
                 gameCanvas.SetActive(false);
                 movementJoystick.gameObject.transform.parent.gameObject.SetActive(false);
                 fightingJoystick.gameObject.transform.parent.gameObject.SetActive(false);
                 break;
             case StaticData.GAME_PROGRESS.ROBOT_RECOGNITION:
                 arGame.SetActive(true);
-                imageController.SetActive(true);
-                imageController.GetComponent<HF_ARCoreImageController>().Retrack();
-                foreach (GameObject visualizer in imageVisualizer) {
-                    visualizer.SetActive(true);
-                }
-                planeController.SetActive(true);
-                foreach (GameObject visualizer in planeVisualizer) {
-                    visualizer.SetActive(false);
-                }
+                HF_ARCoreController.Instance.SwitchToImageRecognition();
                 startMenu.SetActive(false);
                 gameCanvas.SetActive(false);
                 movementJoystick.gameObject.transform.parent.gameObject.SetActive(false);
@@ -100,16 +79,9 @@ public class GameManager : MonoBehaviour {
             case StaticData.GAME_PROGRESS.MOVING:
                 arGame.SetActive(true);
                 gameCanvas.SetActive(true);
+                HF_ARCoreController.Instance.SwitchToGamePlay();
                 movementJoystick.gameObject.transform.parent.gameObject.SetActive(true);
                 fightingJoystick.gameObject.transform.parent.gameObject.SetActive(false);
-                imageController.SetActive(true);
-                foreach (GameObject visualizer in imageVisualizer) {
-                    visualizer.SetActive(false);
-                }
-                planeController.SetActive(true);
-                foreach (GameObject visualizer in planeVisualizer) {
-                    visualizer.SetActive(false);
-                }
                 startMenu.SetActive(false);
                 break;
             case StaticData.GAME_PROGRESS.FIGHTING:
@@ -117,15 +89,16 @@ public class GameManager : MonoBehaviour {
                 gameCanvas.SetActive(true);
                 fightingJoystick.gameObject.transform.parent.gameObject.SetActive(true);
                 movementJoystick.gameObject.transform.parent.gameObject.SetActive(false);
-                imageController.SetActive(true);
-                foreach (GameObject visualizer in imageVisualizer) {
-                    visualizer.SetActive(false);
-                }
-                planeController.SetActive(true);
-                foreach (GameObject visualizer in planeVisualizer) {
-                    visualizer.SetActive(false);
-                }
+                HF_ARCoreController.Instance.SwitchToGamePlay();
                 startMenu.SetActive(false);
+                break;
+            case StaticData.GAME_PROGRESS.WINNING:
+                winningWindow.SetActive(true);
+                HF_ARCoreController.Instance.EndGame();
+                SaveSystem.DeleteAllData();
+                continueButton.interactable = false;
+                fightingJoystick.gameObject.transform.parent.gameObject.SetActive(false);
+                movementJoystick.gameObject.transform.parent.gameObject.SetActive(false);
                 break;
         }
         progress = toProgress;

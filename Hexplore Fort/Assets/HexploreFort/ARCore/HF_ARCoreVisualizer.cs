@@ -34,6 +34,7 @@ public class HF_ARCoreVisualizer : MonoBehaviour {
             return;
         }
 
+        transform.localPosition = new Vector3(0, 0, 0);
         transform.position = new Vector3(transform.position.x, map.transform.position.y, transform.position.z);
         //transform.rotation = Quaternion.Euler(map.transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, map.transform.rotation.eulerAngles.z);
         visualizerObject.SetActive(true);

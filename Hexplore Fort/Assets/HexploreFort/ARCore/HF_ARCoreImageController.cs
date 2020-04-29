@@ -27,7 +27,7 @@ public class HF_ARCoreImageController : MonoBehaviour {
                 Anchor anchor = image.CreateAnchor(image.CenterPose);
                 visualizer = (HF_ARCoreVisualizer)Instantiate(visualizerPrefab, anchor.transform);
                 visualizer.image = image;
-                visualizer.map = GameManager.Instance.planeController.GetComponent<HF_ARCorePlaneController>().visualizer;
+                visualizer.map = HF_ARCoreController.Instance.planeController.GetComponent<HF_ARCorePlaneController>().visualizer;
                 visualizers.Add(image.DatabaseIndex, visualizer);
                 GameManager.Instance.ChangeProgress(StaticData.GAME_PROGRESS.MOVING);
             } else if (image.TrackingState == TrackingState.Stopped && visualizer != null) {

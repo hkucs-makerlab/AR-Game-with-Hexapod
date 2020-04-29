@@ -5,6 +5,7 @@ using HF_Static;
 
 public class Fight : MonoBehaviour {
     public Enemy enemy = new Enemy();
+    public StaticData.ENEMY_TYPE type;
 
     private FightingJoystick joystick;
     private Animator animator;
@@ -16,6 +17,7 @@ public class Fight : MonoBehaviour {
         joystick = GameManager.Instance.fightingJoystick;
 
         animator = GetComponent<Animator>();
+        animator.SetBool(type.ToString(), true);
         player = GameManager.Instance.player;
         ResetEnemyMultiplier();
         ResetPlayerMultiplier();
@@ -24,6 +26,10 @@ public class Fight : MonoBehaviour {
     private void Update() {
         if (playerObj)
         {
+            if (animator.GetBool("isDead")) {
+                animator.SetBool("isDead", false);
+            }
+
             animator.SetBool("loop", false);
             if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1f)
             {
@@ -58,7 +64,7 @@ public class Fight : MonoBehaviour {
         }
 
         joystick.Celebrate();
-        //enemy died animation
+        animator.SetBool("isDead", true);
         yield return new WaitForSeconds(StaticData.FIGHT_OPERATION_TIME);
 
         CancelInvoke();
