@@ -13,7 +13,7 @@ public class Player : System.Object
         hp = 1000;
         atk = 10;
         def = 10;
-        money = 0;
+        money = 10;
         exp = 0;
         yellowKey = 0;
         blueKey = 0;
@@ -24,32 +24,41 @@ public class Player : System.Object
         switch (type) {
             case StaticData.ITEM_TYPE.YELLOW_KEY:
                 yellowKey++;
+                GameManager.Instance.PopupMessage("Yellow Key +1");
                 break;
             case StaticData.ITEM_TYPE.BLUE_KEY:
                 blueKey++;
+                GameManager.Instance.PopupMessage("Blue Key +1");
                 break;
             case StaticData.ITEM_TYPE.RED_KEY:
                 redKey++;
+                GameManager.Instance.PopupMessage("Red Key +1");
                 break;
             case StaticData.ITEM_TYPE.KEY_BOX:
                 yellowKey++;
                 blueKey++;
                 redKey++;
+                GameManager.Instance.PopupMessage("Yellow Key, Blue Key and Red Key +1");
                 break;
             case StaticData.ITEM_TYPE.RED_GEM:
                 atk += 3;
+                GameManager.Instance.PopupMessage("ATK +3");
                 break;
             case StaticData.ITEM_TYPE.BLUE_GEM:
                 def += 3;
+                GameManager.Instance.PopupMessage("DEF +3");
                 break;
             case StaticData.ITEM_TYPE.RED_BOTTLE:
                 hp += 200;
+                GameManager.Instance.PopupMessage("HP +200");
                 break;
             case StaticData.ITEM_TYPE.BLUE_BOTTLE:
                 hp += 500;
+                GameManager.Instance.PopupMessage("HP +500");
                 break;
             case StaticData.ITEM_TYPE.GOLD:
                 money += 200;
+                GameManager.Instance.PopupMessage("Money +200");
                 break;
         }
 
@@ -86,12 +95,6 @@ public class Player : System.Object
         return canOpen;
     }
 
-    public void LevelUp() {
-        hp += 1000;
-        atk += 7;
-        def += 7;
-    }
-
     public void BeingAttack(int atk, int multiplier) {
         int minus = atk * multiplier - def;
         minus = minus <= 0 ? 0 : minus;
@@ -101,7 +104,46 @@ public class Player : System.Object
     public void DefeatEnemy(int gold, int exp) {
         this.money += gold;
         this.exp += exp;
+        if (exp >= 100) {
+            LevelUp();
+            exp -= 100;
+        }
         SaveSystem.SavePlayer(this);
+    }
+
+    private void LevelUp() {
+        hp += 1000;
+        atk += 7;
+        def += 7;
+    }
+
+    public bool Shop(string attribute, int value, int price) {
+        if (money < price) {
+            return false;
+        }
+
+        switch (attribute) {
+            case "yellowKey":
+                yellowKey += value;
+                break;
+            case "blueKey":
+                blueKey += value;
+                break;
+            case "redKey":
+                redKey += value;
+                break;
+            case "atk":
+                atk += value;
+                break;
+            case "def":
+                def += value;
+                break;
+            case "hp":
+                hp += value;
+                break;
+        }
+        money -= price;
+        return true;
     }
 
     public int GetLv() {

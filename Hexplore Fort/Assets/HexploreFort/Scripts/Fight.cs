@@ -69,7 +69,7 @@ public class Fight : MonoBehaviour {
 
         CancelInvoke();
         playerObj.EndFight();
-        player.DefeatEnemy(1, 1);
+        player.DefeatEnemy(enemy.GetMoney(), enemy.GetExp());
         int indexOfCheckpoint = InitializeMap.Instance.map.DefeatEnemy(transform.GetSiblingIndex());
         InitializeMap.Instance.checkpoints.transform.GetChild(indexOfCheckpoint).gameObject.SetActive(false);
         GameManager.Instance.ChangeProgress(StaticData.GAME_PROGRESS.MOVING);

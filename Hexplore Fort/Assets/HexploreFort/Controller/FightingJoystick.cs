@@ -244,7 +244,7 @@ public class FightingJoystick : Joystick {
         dPadLetter = StaticData.DPAD_LETTER.s;
         RobotController.Instance.SetMovementMode(modeLetter, modeNumber, dPadLetter);
 
-        if (!showResult) {
+        if (showResult) {
             yield return new WaitForSeconds(StaticData.RESET_DELAY_TIME);
 
             operating = false;

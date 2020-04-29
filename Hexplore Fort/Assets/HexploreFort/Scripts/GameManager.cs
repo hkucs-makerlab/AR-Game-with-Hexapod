@@ -32,15 +32,15 @@ public class GameManager : MonoBehaviour {
     private Canvas connectionCanvas;
 
     [SerializeField]
-    private GameObject gameCanvas, keys;
+    private GameObject gameCanvas, keys, popupCanvas;
     [SerializeField]
-    public GameObject warningWindow, winningWindow;
+    public GameObject warningWindow, shoppingWindow, winningWindow;
 
     public Player player;
     public StaticData.GAME_PROGRESS progress;
 
     private void Start() {
-        //SaveSystem.DeleteAllData();
+        SaveSystem.DeleteAllData();
         player = SaveSystem.LoadPlayerInfo();
         continueButton.interactable = true;
         if (player == null) {
@@ -64,6 +64,7 @@ public class GameManager : MonoBehaviour {
                 startMenu.SetActive(false);
                 warningWindow.SetActive(false);
                 winningWindow.SetActive(false);
+                shoppingWindow.SetActive(false);
                 gameCanvas.SetActive(false);
                 movementJoystick.gameObject.transform.parent.gameObject.SetActive(false);
                 fightingJoystick.gameObject.transform.parent.gameObject.SetActive(false);
@@ -139,6 +140,11 @@ public class GameManager : MonoBehaviour {
 
     public void ShowKey() {
         keys.SetActive(!keys.activeSelf);
+    }
+
+    public void PopupMessage(string message) {
+        popupCanvas.transform.GetChild(1).gameObject.GetComponent<Text>().text = message;
+        popupCanvas.GetComponent<Animation>().Play();
     }
 
     public void Exit() {

@@ -37,6 +37,7 @@ namespace HF_Static {
             ROBOT_RECOGNITION,
             MOVING,
             FIGHTING,
+            SHOPPING,
             WINNING
         }
 
@@ -82,6 +83,15 @@ namespace HF_Static {
         public static readonly float RESET_DELAY_TIME = 0.5f;
         public static readonly float FIGHT_OPERATION_TIME = 3f;
         public static readonly float PICK_UP_TIME = 1.5f;
+
+        public static readonly List<Tuple<string, string, int, int>> SHOPPING_ITEMS = new List<Tuple<string, string, int, int>>() {
+            Tuple.Create("ATK", "atk", 3, 10),
+            Tuple.Create("DEF", "def", 3, 10),
+            Tuple.Create("HP", "hp", 500, 10),
+            Tuple.Create("Yellow Key", "yellowKey", 1, 10),
+            Tuple.Create("Blue Key", "blueKey", 1, 30),
+            Tuple.Create("Red Key", "redKey", 1, 50),
+        };
     }
 
     public static class Randomize {
