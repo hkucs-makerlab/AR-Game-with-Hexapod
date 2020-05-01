@@ -6,8 +6,16 @@ using HF_Static;
 
 public class Setting : MonoBehaviour
 {
+    [SerializeField]
+    private Slider volumeSlider;
+
+    private void Update() {
+        volumeSlider.value = AudioManager.Instance.bgmSource.volume;
+    }
+
     public void ChangeVolume(Slider volume) {
-        Debug.Log(volume.value);
+        AudioManager.Instance.bgmSource.volume = volume.value;
+        AudioManager.Instance.effectSource.volume = volume.value;
     }
 
     public void ChangeProgress(int i) {

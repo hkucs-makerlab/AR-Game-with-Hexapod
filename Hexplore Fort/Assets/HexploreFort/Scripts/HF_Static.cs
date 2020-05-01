@@ -33,6 +33,7 @@ namespace HF_Static {
 
         public enum GAME_PROGRESS {
             START_MENU,
+            STORY,
             MAP_GENERATION,
             ROBOT_RECOGNITION,
             MOVING,

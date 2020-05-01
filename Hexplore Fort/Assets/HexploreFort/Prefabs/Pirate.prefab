@@ -2274,3 +2274,4 @@ MonoBehaviour:
     money: 4
     exp: 4
   type: 2
+  clip: {fileID: 8300000, guid: 34886eae682d0324ebb10198ccf7d28b, type: 3}

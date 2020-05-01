@@ -719,6 +719,7 @@ MonoBehaviour:
     money: 6
     exp: 6
   type: 1
+  clip: {fileID: 8300000, guid: 34886eae682d0324ebb10198ccf7d28b, type: 3}
 --- !u!1 &2484695113763605642
 GameObject:
   m_ObjectHideFlags: 0

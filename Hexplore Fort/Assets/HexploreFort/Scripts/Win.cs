@@ -4,6 +4,8 @@ using UnityEngine;
 using HF_Static;
 
 public class Win : MonoBehaviour {
+    public AudioClip clip;
+
     private Animator animator;
     private VirtualPlayer playerObj;
 
@@ -27,6 +29,7 @@ public class Win : MonoBehaviour {
             playerObj = collision.gameObject.GetComponent<VirtualPlayer>();
             animator.SetBool("isCrying", true);
             GameManager.Instance.ChangeProgress(StaticData.GAME_PROGRESS.WINNING);
+            AudioManager.Instance.PlaySoundEffect(clip, true);
             Celebrate();
         }
     }

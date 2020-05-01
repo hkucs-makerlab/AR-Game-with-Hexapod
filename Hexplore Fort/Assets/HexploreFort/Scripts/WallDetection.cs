@@ -5,7 +5,7 @@ using UnityEngine;
 public class WallDetection : MonoBehaviour {
     [SerializeField]
     private bool front;
-    private List<GameObject> detectedWall;
+    public List<GameObject> detectedWall;
 
     private void Start() {
         detectedWall = new List<GameObject>();

@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour {
     private Canvas connectionCanvas;
 
     [SerializeField]
-    private GameObject gameCanvas, keys, popupCanvas;
+    private GameObject gameCanvas, keys, popupCanvas, storyCanvas;
     [SerializeField]
     public GameObject warningWindow, shoppingWindow, winningWindow;
 
@@ -40,13 +40,16 @@ public class GameManager : MonoBehaviour {
     public StaticData.GAME_PROGRESS progress;
 
     private void Start() {
-        SaveSystem.DeleteAllData();
+        storyCanvas.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(() => ChangeProgress(StaticData.GAME_PROGRESS.MAP_GENERATION));
+
+        //SaveSystem.DeleteAllData();
         player = SaveSystem.LoadPlayerInfo();
         continueButton.interactable = true;
         if (player == null) {
             player = new Player();
             continueButton.interactable = false;
         }
+
         ChangeProgress(StaticData.GAME_PROGRESS.START_MENU);
     }
 
@@ -54,8 +57,16 @@ public class GameManager : MonoBehaviour {
         switch (toProgress) {
             case StaticData.GAME_PROGRESS.START_MENU:
                 startMenu.SetActive(true);
+                storyCanvas.GetComponent<Canvas>().enabled = false;
                 arGame.SetActive(false);
                 RobotController.Instance.StopMovement();
+                AudioManager.Instance.PlaySoundEffect(null);
+                break;
+            case StaticData.GAME_PROGRESS.STORY:
+                startMenu.SetActive(true);
+                arGame.SetActive(false);
+                storyCanvas.GetComponent<Canvas>().enabled = true;
+                storyCanvas.GetComponentInChildren<Animation>().Play();
                 break;
             case StaticData.GAME_PROGRESS.MAP_GENERATION:
                 HF_ARCoreController.Instance.ResetTracking();
@@ -117,6 +128,8 @@ public class GameManager : MonoBehaviour {
             player = new Player();
             SaveSystem.SavePlayer(player);
             newGame = false;
+            ChangeProgress(StaticData.GAME_PROGRESS.STORY);
+            return;
         }
 
         if (progress == StaticData.GAME_PROGRESS.START_MENU) {

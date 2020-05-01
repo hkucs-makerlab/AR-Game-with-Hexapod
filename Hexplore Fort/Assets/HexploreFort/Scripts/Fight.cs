@@ -6,6 +6,7 @@ using HF_Static;
 public class Fight : MonoBehaviour {
     public Enemy enemy = new Enemy();
     public StaticData.ENEMY_TYPE type;
+    public AudioClip clip;
 
     private FightingJoystick joystick;
     private Animator animator;
@@ -58,6 +59,7 @@ public class Fight : MonoBehaviour {
 
     private IEnumerator Fighting() {
         while (enemy.GetHp() > 0) {
+            AudioManager.Instance.PlaySoundEffect(clip);
             player.BeingAttack(enemy.GetAtk(), enemyMultiplier);
             enemy.BeingAttack(player.GetAtk(), playerMultiplier);
             yield return new WaitForSeconds(1f);
@@ -65,13 +67,13 @@ public class Fight : MonoBehaviour {
 
         joystick.Celebrate();
         animator.SetBool("isDead", true);
+        player.DefeatEnemy(enemy.GetMoney(), enemy.GetExp());
+        int indexOfCheckpoint = InitializeMap.Instance.map.DefeatEnemy(transform.GetSiblingIndex());
+        InitializeMap.Instance.checkpoints.transform.GetChild(indexOfCheckpoint).gameObject.SetActive(false);
         yield return new WaitForSeconds(StaticData.FIGHT_OPERATION_TIME);
 
         CancelInvoke();
         playerObj.EndFight();
-        player.DefeatEnemy(enemy.GetMoney(), enemy.GetExp());
-        int indexOfCheckpoint = InitializeMap.Instance.map.DefeatEnemy(transform.GetSiblingIndex());
-        InitializeMap.Instance.checkpoints.transform.GetChild(indexOfCheckpoint).gameObject.SetActive(false);
         GameManager.Instance.ChangeProgress(StaticData.GAME_PROGRESS.MOVING);
         Destroy(gameObject);
     }
