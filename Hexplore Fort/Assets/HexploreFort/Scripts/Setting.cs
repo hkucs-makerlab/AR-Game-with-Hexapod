@@ -10,7 +10,9 @@ public class Setting : MonoBehaviour
     private Slider volumeSlider;
 
     private void Update() {
-        volumeSlider.value = AudioManager.Instance.bgmSource.volume;
+        if (volumeSlider) {
+            volumeSlider.value = AudioManager.Instance.bgmSource.volume;
+        }
     }
 
     public void ChangeVolume(Slider volume) {

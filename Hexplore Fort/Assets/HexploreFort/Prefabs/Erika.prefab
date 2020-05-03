@@ -2368,6 +2368,7 @@ MonoBehaviour:
     def: 2
     money: 2
     exp: 2
+    icon: {fileID: 21300000, guid: 2743003a68401f744b2875a026390327, type: 3}
   type: 0
   clip: {fileID: 8300000, guid: 34886eae682d0324ebb10198ccf7d28b, type: 3}
 --- !u!1 &7499099393827901000

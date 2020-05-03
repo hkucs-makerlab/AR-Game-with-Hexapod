@@ -8,6 +8,8 @@ public class Enemy : System.Object
 {
     [SerializeField]
     int lv, hp, atk, def, money, exp;
+    [SerializeField]
+    Sprite icon;
 
     public Enemy() {
         lv = 1;
@@ -51,5 +53,9 @@ public class Enemy : System.Object
     public int GetExp()
     {
         return exp;
+    }
+
+    public Sprite GetIcon() {
+        return icon;
     }
 }

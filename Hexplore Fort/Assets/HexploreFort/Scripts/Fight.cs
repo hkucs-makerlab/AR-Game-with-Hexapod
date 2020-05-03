@@ -58,24 +58,32 @@ public class Fight : MonoBehaviour {
     }
 
     private IEnumerator Fighting() {
-        while (enemy.GetHp() > 0) {
+        while (enemy.GetHp() > 0 && player.GetHp() > 0) {
             AudioManager.Instance.PlaySoundEffect(clip);
             player.BeingAttack(enemy.GetAtk(), enemyMultiplier);
             enemy.BeingAttack(player.GetAtk(), playerMultiplier);
             yield return new WaitForSeconds(1f);
         }
 
-        joystick.Celebrate();
-        animator.SetBool("isDead", true);
-        player.DefeatEnemy(enemy.GetMoney(), enemy.GetExp());
-        int indexOfCheckpoint = InitializeMap.Instance.map.DefeatEnemy(transform.GetSiblingIndex());
-        InitializeMap.Instance.checkpoints.transform.GetChild(indexOfCheckpoint).gameObject.SetActive(false);
-        yield return new WaitForSeconds(StaticData.FIGHT_OPERATION_TIME);
+        if (enemy.GetHp() <= 0) {
+            joystick.Celebrate();
+            animator.SetBool("isDead", true);
+            player.DefeatEnemy(enemy.GetMoney(), enemy.GetExp());
+            int indexOfCheckpoint = InitializeMap.Instance.map.DefeatEnemy(transform.GetSiblingIndex());
+            if (indexOfCheckpoint >= 0) {
+                InitializeMap.Instance.checkpoints.transform.GetChild(indexOfCheckpoint).gameObject.SetActive(false);
+            }
+            yield return new WaitForSeconds(StaticData.FIGHT_OPERATION_TIME);
 
-        CancelInvoke();
-        playerObj.EndFight();
-        GameManager.Instance.ChangeProgress(StaticData.GAME_PROGRESS.MOVING);
-        Destroy(gameObject);
+            CancelInvoke();
+            playerObj.EndFight();
+            GameManager.Instance.ChangeProgress(StaticData.GAME_PROGRESS.MOVING);
+            gameObject.SetActive(false);
+        } else {
+            CancelInvoke();
+            playerObj.EndFight();
+            GameManager.Instance.ChangeProgress(StaticData.GAME_PROGRESS.LOSING);
+        }
     }
 
     public void MissDefendOperation() {

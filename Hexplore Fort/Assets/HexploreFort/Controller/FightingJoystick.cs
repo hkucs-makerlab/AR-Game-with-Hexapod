@@ -12,6 +12,8 @@ public class FightingJoystick : Joystick {
     private Slider timer, enemyHp;
     [SerializeField]
     private Text hp, atk, def;
+    [SerializeField]
+    private Image icon;
 
     private StaticData.MODE_LETTER modeLetter;
     private StaticData.MODE_NUMBER modeNumber;
@@ -53,6 +55,7 @@ public class FightingJoystick : Joystick {
         noOfInstruction = fight.enemy.GetLv();
         this.fight = fight;
         fullHp = this.fight.enemy.GetHp();
+        icon.sprite = this.fight.enemy.GetIcon();
         Attack();
         NewInstructions();
         instructionContainer.transform.parent.gameObject.SetActive(true);

@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField]
     private GameObject gameCanvas, keys, popupCanvas, storyCanvas;
     [SerializeField]
-    public GameObject warningWindow, shoppingWindow, winningWindow;
+    public GameObject warningWindow, shoppingWindow, winningWindow, losingWindow;
 
     public Player player;
     public StaticData.GAME_PROGRESS progress;
@@ -42,7 +42,6 @@ public class GameManager : MonoBehaviour {
     private void Start() {
         storyCanvas.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(() => ChangeProgress(StaticData.GAME_PROGRESS.MAP_GENERATION));
 
-        //SaveSystem.DeleteAllData();
         player = SaveSystem.LoadPlayerInfo();
         continueButton.interactable = true;
         if (player == null) {
@@ -75,6 +74,7 @@ public class GameManager : MonoBehaviour {
                 startMenu.SetActive(false);
                 warningWindow.SetActive(false);
                 winningWindow.SetActive(false);
+                losingWindow.SetActive(false);
                 shoppingWindow.SetActive(false);
                 gameCanvas.SetActive(false);
                 movementJoystick.gameObject.transform.parent.gameObject.SetActive(false);
@@ -111,6 +111,15 @@ public class GameManager : MonoBehaviour {
                 continueButton.interactable = false;
                 fightingJoystick.gameObject.transform.parent.gameObject.SetActive(false);
                 movementJoystick.gameObject.transform.parent.gameObject.SetActive(false);
+                break;
+            case StaticData.GAME_PROGRESS.LOSING:
+                losingWindow.SetActive(true);
+                HF_ARCoreController.Instance.EndGame();
+                SaveSystem.DeleteAllData();
+                continueButton.interactable = false;
+                fightingJoystick.gameObject.transform.parent.gameObject.SetActive(false);
+                movementJoystick.gameObject.transform.parent.gameObject.SetActive(false);
+                RobotController.Instance.StopMovement();
                 break;
         }
         progress = toProgress;

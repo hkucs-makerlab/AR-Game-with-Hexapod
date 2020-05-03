@@ -9,12 +9,14 @@ public class Door : MonoBehaviour {
 
     public IEnumerator Open() {
         int indexOfCheckpoint = InitializeMap.Instance.map.OpenDoor(transform.GetSiblingIndex());
-        InitializeMap.Instance.checkpoints.transform.GetChild(indexOfCheckpoint).gameObject.SetActive(false);
+        if (indexOfCheckpoint >= 0) {
+            InitializeMap.Instance.checkpoints.transform.GetChild(indexOfCheckpoint).gameObject.SetActive(false);
+        }
         GetComponent<Animation>().Play();
         AudioManager.Instance.PlaySoundEffect(clip);
 
         yield return new WaitForSeconds(3f);
 
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 }

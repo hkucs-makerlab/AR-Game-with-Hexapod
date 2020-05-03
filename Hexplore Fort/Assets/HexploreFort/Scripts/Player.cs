@@ -143,6 +143,8 @@ public class Player : System.Object
                 break;
         }
         money -= price;
+
+        SaveSystem.SavePlayer(this);
         return true;
     }
 

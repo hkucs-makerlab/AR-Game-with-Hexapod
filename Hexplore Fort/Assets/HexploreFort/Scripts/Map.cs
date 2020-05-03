@@ -73,10 +73,12 @@ public class Map : System.Object
 
     public int OpenDoor(int i) {
         doors[i] = false;
+        Debug.Log(i);
         SaveSystem.SaveMap(this);
 
         foreach (Checkpoint checkpoint in checkpoints) {
             if (checkpoint.type == StaticData.CHECKPOINT.DOOR && checkpoint.indexOfType == i) {
+                Debug.Log(checkpoint.indexOfCheckpoint);
                 return checkpoint.indexOfCheckpoint;
             }
         }
@@ -90,11 +92,13 @@ public class Map : System.Object
     }
 
     public int DefeatEnemy(int i) {
+        Debug.Log(i);
         enemys[i] = false;
         SaveSystem.SaveMap(this);
 
         foreach (Checkpoint checkpoint in checkpoints) {
             if (checkpoint.type == StaticData.CHECKPOINT.ENEMY && checkpoint.indexOfType == i) {
+                Debug.Log(checkpoint.indexOfCheckpoint);
                 return checkpoint.indexOfCheckpoint;
             }
         }

@@ -39,7 +39,8 @@ namespace HF_Static {
             MOVING,
             FIGHTING,
             SHOPPING,
-            WINNING
+            WINNING,
+            LOSING
         }
 
         public enum MODE_LETTER {
